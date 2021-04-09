@@ -12,27 +12,27 @@ public class UserTweetEntity {
     public static final String SEQUENCE_NAME = "users_sequence";
 
 	
-	private String loginid;
+	private String loginId;
 	private String tweet;
 	@Id
-	private int tweetId;
+	private long tweetId;
 
 	
 	public UserTweetEntity() {
 		
 	}
 
-	public UserTweetEntity( String tweet, int tweetId) {
+	public UserTweetEntity( String tweet, long tweetId) {
 		this.tweet = tweet;
 		this.tweetId = tweetId;
 	}
 
-	public String getLoginid() {
-		return loginid;
+	public String getLoginId() {
+		return loginId;
 	}
 
-	public void setLoginid(String loginid) {
-		this.loginid = loginid;
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
 	}
 
 	public String getTweet() {
@@ -43,12 +43,12 @@ public class UserTweetEntity {
 		this.tweet = tweet;
 	}
 
-	public int getTweetId() {
+	public long getTweetId() {
 		return tweetId;
 	}
 
-	public void setTweetId(int tweetId) {
-		this.tweetId = tweetId;
+	public void setTweetId(long l) {
+		this.tweetId = l;
 	}
 	
 	

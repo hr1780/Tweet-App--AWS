@@ -1,10 +1,13 @@
 
 package com.tweet.tweet.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import com.tweet.tweet.dto.UserTweetDTO;
 import com.tweet.tweet.entity.UserTweetEntity;
 import com.tweet.tweet.mapper.UserTweetMapper;
 import com.tweet.tweet.repository.UserTweetRepo;
@@ -14,6 +17,7 @@ public class UserTweetService {
 
 	UserTweetRepo repo;
 	UserTweetMapper mapper;
+
 	
 	@Autowired
 	public void setRepo(UserTweetRepo repo) {
@@ -26,12 +30,20 @@ public class UserTweetService {
 	
 	public String postTweet(String loginId , String tweet) {
 		UserTweetEntity entity = new UserTweetEntity();
-		entity.setTweet(tweet);
-		entity.setLoginid(loginId);
+		entity.setTweetId(SequenceGeneratorService.generateSequence(UserTweetEntity.SEQUENCE_NAME));
+		entity.setTweet(tweet);	
+		entity.setLoginId(loginId);
 		UserTweetEntity entity2 = repo.save(entity);
-		System.out.println(entity2);
 		return entity2.getTweet();
 		
 	}
 	
+	public List<UserTweetDTO> getAllTweet() {
+		return mapper.entityToDto(repo.findAll());
+	}
+	
+	public List<String> getUserTweet(String loginId){
+		List<String> list = repo.findAllByUser(loginId);
+		return list;
+	}
 }

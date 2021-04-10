@@ -15,8 +15,8 @@ public interface RegisterRepo extends MongoRepository<RegisterEntity, String> {
 	@Query(value = "{'loginId' : ?0 , 'email' : ?1}")
 	RegisterEntity findUser(String loginId, String email);
 
-	@Query("{'name' : userId}")
-	List<RegisterEntity> searchUser(String userId);
+	@Query("{ 'loginId' : { $regex: ?0 } }")
+	List<RegisterEntity> findUsersByRegexpName(String userId);
 
 	
 }

@@ -25,36 +25,37 @@ public class UserTweetService {
 	RegisterRepo registerrepo;
 	@Autowired
 	RegisterMapper registermapper;
-	
-	
+
 	@Autowired
 	public void setRegisterrepo(RegisterRepo registerrepo) {
 		this.registerrepo = registerrepo;
 	}
+
 	@Autowired
 	public void setRepo(UserTweetRepo repo) {
 		this.repo = repo;
 	}
+
 	@Autowired
 	public void setMapper(UserTweetMapper mapper) {
 		this.mapper = mapper;
 	}
-	
-	public String postTweet(String loginId , String tweet) {
+
+	public String postTweet(String loginId, String tweet) {
 		UserTweetEntity entity = new UserTweetEntity();
 		entity.setTweetId(SequenceGeneratorService.generateSequence(UserTweetEntity.SEQUENCE_NAME));
-		entity.setTweet(tweet);	
+		entity.setTweet(tweet);
 		entity.setLoginId(loginId);
 		UserTweetEntity entity2 = repo.save(entity);
 		return entity2.getTweet();
-		
+
 	}
-	
+
 	public List<UserTweetDTO> getAllTweet() {
 		return mapper.entityToDto(repo.findAll());
 	}
-	
-	public List<String> getUserTweet(String loginId){
+
+	public List<String> getUserTweet(String loginId) {
 		List<UserTweetEntity> list = repo.findAllByUser(loginId);
 		List<String> strings = new ArrayList<String>();
 		for (UserTweetEntity userTweetEntity : list) {
@@ -62,8 +63,8 @@ public class UserTweetService {
 		}
 		return strings;
 	}
-	
-	public List<String> getAllUsers(){
+
+	public List<String> getAllUsers() {
 		List<RegisterEntity> list = registerrepo.findAll();
 		List<String> userList = new ArrayList<String>();
 		for (RegisterEntity registerEntity : list) {
@@ -71,26 +72,27 @@ public class UserTweetService {
 		}
 		return userList;
 	}
+
 	public String deleteTweet(String loginId, int tweetId) {
-		if(repo.findById(tweetId).orElse(null) != null) {
-			 repo.deleteById(tweetId);
-				return "User Deleted";
+		if (repo.findById(tweetId).orElse(null) != null) {
+			repo.deleteById(tweetId);
+			return "User Deleted";
 		}
 		return "No Such tweet ";
-		
+
 	}
-	
-	public UserTweetDTO changeTweet(String tweet, int tweetId , String loginId) {
-		UserTweetEntity entity = repo.findTweet(tweetId , loginId).orElse(null);
-		if(entity!= null) {
+
+	public UserTweetDTO changeTweet(String tweet, int tweetId, String loginId) {
+		UserTweetEntity entity = repo.findTweet(tweetId, loginId).orElse(null);
+		if (entity != null) {
 			entity.setTweet(tweet);
 			repo.save(entity);
 		}
 		return mapper.entityToDto(entity);
 	}
-	
+
 	public List<RegisterDTO> searchUser(String userId) {
-		List<RegisterEntity> entity = registerrepo.searchUser(userId);
+		List<RegisterEntity> entity = registerrepo.findUsersByRegexpName(userId);
 		return registermapper.entityToDto(entity);
 	}
 }
